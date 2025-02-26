@@ -6,7 +6,6 @@ import Markdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
 import axios from "axios";
-import "./App.css";
 
 function App() {
     const [code, setCode] = useState(`function sum() {
@@ -14,14 +13,14 @@ function App() {
 }`);
 
     const [review, setReview] = useState("");
-    const [loading, setLoading] = useState(false); // State for loader
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         prism.highlightAll();
     }, []);
 
     async function reviewCode() {
-        setLoading(true); // Start loading
+        setLoading(true);
         try {
             const response = await axios.post(
                 "http://localhost:3000/ai/get-review",
@@ -32,22 +31,24 @@ function App() {
             console.error("Error fetching review:", error);
             setReview("An error occurred while fetching the review.");
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false);
         }
     }
 
     return (
-        <>
-            {/* Added Welcome Message */}
-            <header className="welcome">
-                <h1>Welcome to ReviewBot</h1>
-                <p>Get your code reviewed instantly.</p>
+        <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col">
+            {/* Header */}
+            <header className="bg-gray-800 py-6 text-center shadow-lg">
+                <h1 className="text-3xl font-bold text-blue-400">ReviewBot</h1>
+                <p className="mt-2 text-gray-300">Get your code reviewed instantly.</p>
             </header>
 
-            {/* Original Layout Stays the Same */}
-            <main>
-                <div className="left">
-                    <div className="code">
+            {/* Main Content */}
+            <main className="flex-1 flex flex-col md:flex-row gap-6 p-6 overflow-hidden">
+                {/* Left Panel - Code Editor */}
+                <div className="flex-1 bg-gray-800 rounded-lg shadow-lg p-4 flex flex-col">
+                    <h2 className="text-xl font-semibold mb-4 text-gray-200">Code Editor</h2>
+                    <div className="flex-1 overflow-auto bg-gray-700 rounded-lg p-4">
                         <Editor
                             value={code}
                             onValueChange={(code) => setCode(code)}
@@ -60,32 +61,47 @@ function App() {
                             }
                             padding={10}
                             style={{
-                                fontFamily:
-                                    '"Fira code", "Fira Mono", monospace',
-                                fontSize: 18,
-                                border: "1px solid #ddd",
-                                borderRadius: "5px",
+                                fontFamily: '"Fira code", "Fira Mono", monospace',
+                                fontSize: 16,
+                                color: "#ffffff",
+                                backgroundColor: "transparent",
+                                border: "none",
                                 height: "100%",
                                 width: "100%",
                             }}
                         />
                     </div>
-                    {/* Replaced div with button */}
-                    <button onClick={reviewCode} className="review" disabled={loading}>
-                        {loading ? "Reviewing..." : "Review"}
+                    <button
+                        onClick={reviewCode}
+                        disabled={loading}
+                        className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
+                    >
+                        {loading ? "Reviewing..." : "Review Code"}
                     </button>
                 </div>
-                <div className="right">
-                    {loading ? (
-                        <div className="loader">Loading...</div> // Loader while waiting for response
-                    ) : (
-                        <Markdown rehypePlugins={[rehypeHighlight]}>
-                            {review}
-                        </Markdown>
-                    )}
+
+                {/* Right Panel - Review Output */}
+                <div className="flex-1 bg-gray-800 rounded-lg shadow-lg p-4 flex flex-col">
+                    <h2 className="text-xl font-semibold mb-4 text-gray-200">Review Output</h2>
+                    <div className="flex-1 overflow-auto bg-gray-700 rounded-lg p-4">
+                        {loading ? (
+                            <div className="flex justify-center items-center h-full text-gray-300 text-xl animate-pulse">
+                                Loading...
+                            </div>
+                        ) : (
+                            <Markdown rehypePlugins={[rehypeHighlight]}>
+                                {review}
+                            </Markdown>
+                        )}
+                    </div>
                 </div>
             </main>
-        </>
+
+            {/* Footer */}
+            <footer className="bg-gray-800 py-4 text-center text-gray-300">
+                <p>© 2023 ReviewBot. All rights reserved.</p>
+            </footer>
+        </div>
     );
 }
 
