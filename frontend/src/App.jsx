@@ -9,7 +9,7 @@ import axios from "axios";
 
 function App() {
     const [code, setCode] = useState(`function sum() {
-  return 1 + 1;
+  return a + b;
 }`);
 
     const [review, setReview] = useState("");
@@ -40,14 +40,18 @@ function App() {
             {/* Header */}
             <header className="bg-gray-800 py-6 text-center shadow-lg">
                 <h1 className="text-3xl font-bold text-blue-400">ReviewBot</h1>
-                <p className="mt-2 text-gray-300">Get your code reviewed instantly.</p>
+                <p className="mt-2 text-gray-300">
+                    Get your code reviewed instantly.
+                </p>
             </header>
 
             {/* Main Content */}
             <main className="flex-1 flex flex-col md:flex-row gap-6 p-6 overflow-hidden">
                 {/* Left Panel - Code Editor */}
                 <div className="flex-1 bg-gray-800 rounded-lg shadow-lg p-4 flex flex-col">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-200">Code Editor</h2>
+                    <h2 className="text-xl font-semibold mb-4 text-gray-200">
+                        Code Editor
+                    </h2>
                     <div className="flex-1 overflow-auto bg-gray-700 rounded-lg p-4">
                         <Editor
                             value={code}
@@ -61,7 +65,8 @@ function App() {
                             }
                             padding={10}
                             style={{
-                                fontFamily: '"Fira code", "Fira Mono", monospace',
+                                fontFamily:
+                                    '"Fira code", "Fira Mono", monospace',
                                 fontSize: 16,
                                 color: "#ffffff",
                                 backgroundColor: "transparent",
@@ -82,7 +87,9 @@ function App() {
 
                 {/* Right Panel - Review Output */}
                 <div className="flex-1 bg-gray-800 rounded-lg shadow-lg p-4 flex flex-col">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-200">Review Output</h2>
+                    <h2 className="text-xl font-semibold mb-4 text-gray-200">
+                        Review Output
+                    </h2>
                     <div className="flex-1 overflow-auto bg-gray-700 rounded-lg p-4">
                         {loading ? (
                             <div className="flex justify-center items-center h-full text-gray-300 text-xl animate-pulse">
@@ -99,7 +106,10 @@ function App() {
 
             {/* Footer */}
             <footer className="bg-gray-800 py-4 text-center text-gray-300">
-                <p>© 2023 ReviewBot. All rights reserved.</p>
+                <p>
+                    © 2025 ReviewBot | Code reviewed, bugs squashed, smiles
+                    delivered.
+                </p>
             </footer>
         </div>
     );
