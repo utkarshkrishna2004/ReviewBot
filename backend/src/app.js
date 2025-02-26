@@ -8,7 +8,7 @@ app.use(express.json());
 
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: "*", // Allow all origins (or specify your Vercel frontend URL)
         credentials: true,
     })
 );
