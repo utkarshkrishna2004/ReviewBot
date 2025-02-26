@@ -23,7 +23,7 @@ function App() {
         setLoading(true);
         try {
             const response = await axios.post(
-                "http://localhost:3000/ai/get-review",
+                "http://localhost:3000/ai/get-review",  // Use the local backend URL
                 { code }
             );
             setReview(response.data);
