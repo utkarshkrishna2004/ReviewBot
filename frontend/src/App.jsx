@@ -9,26 +9,42 @@ import axios from "axios";
 import "./App.css";
 
 function App() {
-    const [code, setCode] = useState(` function sum() {
-  return 1 + 1
+    const [code, setCode] = useState(`function sum() {
+  return 1 + 1;
 }`);
 
-    const [review, setReview] = useState(``);
+    const [review, setReview] = useState("");
+    const [loading, setLoading] = useState(false); // State for loader
 
     useEffect(() => {
         prism.highlightAll();
     }, []);
 
     async function reviewCode() {
-        const response = await axios.post(
-            "http://localhost:3000/ai/get-review",
-            { code }
-        );
-        setReview(response.data);
+        setLoading(true); // Start loading
+        try {
+            const response = await axios.post(
+                "http://localhost:3000/ai/get-review",
+                { code }
+            );
+            setReview(response.data);
+        } catch (error) {
+            console.error("Error fetching review:", error);
+            setReview("An error occurred while fetching the review.");
+        } finally {
+            setLoading(false); // Stop loading
+        }
     }
 
     return (
         <>
+            {/* Added Welcome Message */}
+            <header className="welcome">
+                <h1>Welcome to ReviewBot</h1>
+                <p>Get your code reviewed instantly.</p>
+            </header>
+
+            {/* Original Layout Stays the Same */}
             <main>
                 <div className="left">
                     <div className="code">
@@ -54,14 +70,19 @@ function App() {
                             }}
                         />
                     </div>
-                    <div onClick={reviewCode} className="review">
-                        Review
-                    </div>
+                    {/* Replaced div with button */}
+                    <button onClick={reviewCode} className="review" disabled={loading}>
+                        {loading ? "Reviewing..." : "Review"}
+                    </button>
                 </div>
                 <div className="right">
-                    <Markdown rehypePlugins={[rehypeHighlight]}>
-                        {review}
-                    </Markdown>
+                    {loading ? (
+                        <div className="loader">Loading...</div> // Loader while waiting for response
+                    ) : (
+                        <Markdown rehypePlugins={[rehypeHighlight]}>
+                            {review}
+                        </Markdown>
+                    )}
                 </div>
             </main>
         </>
